@@ -7,8 +7,8 @@ const queue = "hello";
   const connection = await amqp.connect("amqp://localhost");
   const channel = await connection.createChannel();
 
-  // durable: queue survive a RabbitMQ node restart.
   channel.assertQueue(queue, {
+    // durable: queue survive a RabbitMQ node restart.
     durable: true,
   });
 

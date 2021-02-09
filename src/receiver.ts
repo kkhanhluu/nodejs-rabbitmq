@@ -23,6 +23,7 @@ const queue = "hello";
           (message as ConsumeMessage).content.toString().split(".").length - 1;
         setTimeout(() => {
           console.log("[x] Done");
+          channel.ack(message as ConsumeMessage);
         }, secs * 1000);
       },
       {
