@@ -1,16 +1,18 @@
 import amqp from "amqplib";
 
+const message = process.argv.slice(2).join(" ") || "Hello world";
+
 const queue = "hello";
 (async () => {
   const connection = await amqp.connect("amqp://localhost");
   const channel = await connection.createChannel();
-  const message = "i am trying to connect to rabbitmq";
 
+  // durable: queue survive a RabbitMQ node restart.
   channel.assertQueue(queue, {
-    durable: false,
+    durable: true,
   });
 
-  channel.sendToQueue(queue, Buffer.from(message));
+  channel.sendToQueue(queue, Buffer.from(message), { persistent: true });
 
   console.log(`[x] Sent ${message}`);
 })();
