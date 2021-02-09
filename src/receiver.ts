@@ -28,7 +28,9 @@ const queue = "hello";
       },
       {
         // consumer send acknowledgment back to queue after consuming message
-        noAck: true,
+        // if true, the broker won't expect an acknowledgement of messages delivered to consumer, i.e broker will dequeue message as soons as
+        // they have been sent to consumer.
+        noAck: false,
       }
     );
   } catch (err) {
