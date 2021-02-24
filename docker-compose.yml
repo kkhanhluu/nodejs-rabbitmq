@@ -1,15 +1,12 @@
-version: '2'
-
+version: '3.8'
 services:
   rabbitmq:
-    image: 'rabbitmq:3.8.12-rc.1'
-    ports:
-      - '4369:4369'
-      - '5672:5672'
-      - '25672:25672'
-      - '15672:15672'
+    image: rabbitmq:3-management-alpine
     volumes:
-      - 'rabbitmq_data:/bitnami'
-volumes:
-  rabbitmq_data:
-    driver: local
+      - ./rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@rabbitmq
+      - ./rabbitmq/logs:/var/log/rabbitmq/log
+    ports:
+      - 5672:5672
+      - 15672:15672
