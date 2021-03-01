@@ -24,13 +24,10 @@ function handleErrorMessage(err: any) {
 
     const promptMessage = () => {
       rl.question("Enter message to send \n", (message) => {
-        publisher.sendMessage(
-          message,
-          handleErrorMessage,
-          handleSuccessMessage
-        );
-
-        promptMessage();
+        publisher.sendMessage(message, handleErrorMessage, () => {
+          handleSuccessMessage(message);
+          promptMessage();
+        });
       });
     };
 

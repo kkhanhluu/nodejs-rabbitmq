@@ -5,6 +5,13 @@
   "product_version": "3.8.12",
   "users": [
     {
+      "name": "invoice-admin",
+      "password_hash": "SYfM/VH/pV/hVC2dP7I0N1RvXjIsejBQmLiy7/6l+jeSZqV1",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": "administrator",
+      "limits": {}
+    },
+    {
       "name": "admin",
       "password_hash": "iFnAXNazRkxc2L08EwPiZZIaB2sKoMoVtUNujDZHM8T0yGWm",
       "hashing_algorithm": "rabbit_password_hashing_sha256",
@@ -14,6 +21,13 @@
   ],
   "vhosts": [{ "name": "/" }],
   "permissions": [
+    {
+      "user": "invoice-admin",
+      "vhost": "/",
+      "configure": ".*",
+      "write": "contract-invoice",
+      "read": "contract-invoice"
+    },
     {
       "user": "admin",
       "vhost": "/",
@@ -42,6 +56,13 @@
   "policies": [],
   "queues": [
     {
+      "name": "rabbitMQ-test",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": { "x-queue-type": "classic" }
+    },
+    {
       "name": "contract-invoice",
       "vhost": "/",
       "durable": true,
@@ -52,11 +73,19 @@
   "exchanges": [],
   "bindings": [
     {
-      "source": "amq.topic",
+      "source": "amq.direct",
       "vhost": "/",
       "destination": "contract-invoice",
       "destination_type": "queue",
-      "routing_key": "contract.created",
+      "routing_key": "contract.invoice",
+      "arguments": {}
+    },
+    {
+      "source": "amq.direct",
+      "vhost": "/",
+      "destination": "rabbitMQ-test",
+      "destination_type": "queue",
+      "routing_key": "rabbitMQ.test",
       "arguments": {}
     }
   ]

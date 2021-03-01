@@ -4,6 +4,9 @@ import amqp, {
   ConsumeMessage,
   Replies,
 } from "amqplib";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 export class RabbitMQClient {
   private connection!: Connection;
@@ -52,7 +55,7 @@ export class RabbitMQClient {
   sendMessage(
     message: string,
     errorCallback: (error: any) => void,
-    successCallback: (ok: Replies.Empty) => void,
+    successCallback: () => void,
     options = {}
   ): boolean {
     return this.channel.sendToQueue(
@@ -63,7 +66,7 @@ export class RabbitMQClient {
         if (err) {
           errorCallback(err);
         } else {
-          successCallback(ok);
+          successCallback();
         }
       }
     );
@@ -75,7 +78,7 @@ export class RabbitMQClient {
     return this.channel.consume(this.queue, callback, { noAck: false });
   }
 
-  checkQueue(queue: string): Promise<Replies.AssertQueue> {
+  private checkQueue(queue: string): Promise<Replies.AssertQueue> {
     return this.channel.checkQueue(queue);
   }
 }
