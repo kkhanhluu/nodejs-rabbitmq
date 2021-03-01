@@ -14,15 +14,10 @@ are present.
 
 Run `docker-compose up` to start rabbitMQ.
 
-## How it works
-
-- A **producer** is a user application that sends message to an `exchange`
-- An `exchange` sends messages to a `queue` with **exchange types** (binding):
-
-- A `queue` sends message to `consumer`, which is an user application that receives messgages.
-
-.
-
-### direct exchange (default)
-
-Look at sender.ts and receiver.ts to see more details
+# See more details
+In order to see more details about RabbitMQ and AMQP Protocol, take a look at these file in order: 
+* [AMQP Protocol](https://github.com/kkhanhluu/nodejs-rabbitmq/blob/main/notes/AMQ%20Protocol.md)
+* [Message properties](https://github.com/kkhanhluu/nodejs-rabbitmq/blob/main/notes/message%20properties.md)
+* [Publishing message](https://github.com/kkhanhluu/nodejs-rabbitmq/blob/main/notes/Publishing%20message.md)
+* [Consuming message](https://github.com/kkhanhluu/nodejs-rabbitmq/blob/main/notes/Consume%20message.md)
+* [Exchange routing](https://github.com/kkhanhluu/nodejs-rabbitmq/blob/main/notes/Exchange%20Routing.md)
