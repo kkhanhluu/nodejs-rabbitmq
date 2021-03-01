@@ -1,9 +1,14 @@
-import amqp, { Channel, Connection, ConsumeMessage, Replies } from "amqplib";
+import amqp, {
+  ConfirmChannel,
+  Connection,
+  ConsumeMessage,
+  Replies,
+} from "amqplib";
 
 export class RabbitMQClient {
   private connection!: Connection;
 
-  public channel!: Channel;
+  public channel!: ConfirmChannel;
 
   private queue: string;
 
@@ -37,13 +42,31 @@ export class RabbitMQClient {
       password: process.env.RABBIT_MQ_PASSWORD,
       vhost: process.env.RABBIT_MQ_VHOST,
     });
-    this.channel = await this.connection.createChannel();
+    this.channel = await this.connection.createConfirmChannel();
+    this.channel.prefetch(1);
+    this.channel.on("return", (message: ConsumeMessage) => {
+      console.error(`❌ Non routable message: ${message.content.toString()}`);
+    });
   }
 
-  sendMessage(message: string): boolean {
-    return this.channel.sendToQueue(this.queue, Buffer.from(message), {
-      //   persistent: true,
-    });
+  sendMessage(
+    message: string,
+    errorCallback: (error: any) => void,
+    successCallback: (ok: Replies.Empty) => void,
+    options = {}
+  ): boolean {
+    return this.channel.sendToQueue(
+      this.queue,
+      Buffer.from(message),
+      { mandatory: true, ...options },
+      (err, ok) => {
+        if (err) {
+          errorCallback(err);
+        } else {
+          successCallback(ok);
+        }
+      }
+    );
   }
 
   subscribe(
