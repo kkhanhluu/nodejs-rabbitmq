@@ -10,7 +10,7 @@ There are 4 basic types of exchange:
 The direct exchange is useful when you’re going to deliver a message with a specific target, or a set of targets.
 A message with `routing key` R will go to the queues whose `binding key` K = R.
 
-# fanout
+# Fanout
 
 Exchanges broadcasts all the messages it receives to all the queues it knows
 
